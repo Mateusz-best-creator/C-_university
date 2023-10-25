@@ -1,1 +1,1 @@
-# C++_university
+# C_university
