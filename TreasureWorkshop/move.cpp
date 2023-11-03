@@ -9,16 +9,17 @@ void display_user_encounter_wall()
     cout << "Can't move there, you will be standing on the wall, loosing move." << endl;
 }
 
-void move_player(const vector<Player *> &players, int active_player_number,
-                 const vector<int> &trapdoor_coordinates_x, const vector<int> &trapdoor_coordinates_y,
-                 const vector<int> &treasure_coordinates_x, const vector<int> &treasure_coordinates_y,
-                 const vector<int> &walls_coordinates_x, const vector<int> &walls_coordinates_y)
+void move_player(const vector<Player*>& players, int active_player_number,
+    const vector<int>& trapdoor_coordinates_x, const vector<int>& trapdoor_coordinates_y,
+    const vector<int>& treasure_coordinates_x, const vector<int>& treasure_coordinates_y,
+    const vector<int>& walls_coordinates_x, const vector<int>& walls_coordinates_y,
+    vector<int>& lost_players_indexes)
 {
     char direction;
     cin >> direction;
 
     // Get current players
-    Player *player = players[active_player_number];
+    Player* player = players[active_player_number];
 
     int before_move_x_coordinate = player->x_coordinate;
     int before_move_y_coordinate = player->y_coordinate;
@@ -83,6 +84,9 @@ void move_player(const vector<Player *> &players, int active_player_number,
     {
         cout << "Player " << active_player_number + 1 << " lost" << endl;
         player->lost = 'T';
+        // Here we have to keep track of players that lost
+        lost_players_indexes.push_back(active_player_number);
+        return;
     }
 
     // Check if player see a treasure
@@ -98,5 +102,11 @@ void move_player(const vector<Player *> &players, int active_player_number,
     else
     {
         player->stands_on_the_treasure = false;
+    }
+
+    if (player->initial_x_coordinate == player->x_coordinate && player->initial_y_coordinate == player->y_coordinate && player->has_treasure == 'T')
+    {
+        cout << "Player " << active_player_number + 1 << " won" << endl;
+        player->won_game = 'T';
     }
 }
