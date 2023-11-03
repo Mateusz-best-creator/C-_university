@@ -24,151 +24,164 @@ const string wall_object_name = "wall";
 const string treasure_object_name = "treasure";
 const string trapdoor_object_name = "trapdoor";
 
-int main()
+void increment_player_counter(size_t& counter, const vector<Player*>& players)
 {
+	counter++;
+	// Beacuse we index from 0 I have to subtract one from the size of players vector
+	if (counter > players.size() - 1)
+	{
+		// We want to make a "circle"
+		counter = 0;
+	}
+}
 
-    size_t active_player_number = 0;
+int main() {
 
-    // Initialize both players
-    Player *player1 = new Player();
-    Player *player2 = new Player();
-    // Initialize players (we will store the inside a vector). Initially we have two players, so we add them to our players vector
-    vector<Player *> players = {player1, player2};
+	size_t active_player_number = 0;
 
-    // In these vectors we store all X and Y walls coordinates
-    vector<int> walls_coordinates_x = {wall1_x, wall2_x};
-    vector<int> walls_coordinates_y = {wall1_y, wall2_y};
+	// Initialize both players
+	Player* player1 = new Player();
+	Player* player2 = new Player();
+	// Initialize players (we will store the inside a vector). Initially we have two players, so we add them to our players vector
+	vector<Player*> players = { player1, player2 };
 
-    // In these vectors we store all X and Y treasure coordinates
-    vector<int> treasure_coordinates_x = {treasure_x};
-    vector<int> treasure_coordinates_y = {treasure_y};
+	// In these vectors we store all X and Y walls coordinates
+	vector<int> walls_coordinates_x = { wall1_x, wall2_x };
+	vector<int> walls_coordinates_y = { wall1_y, wall2_y };
 
-    // In these vectors we store all X and Y trapdoor coordinates
-    vector<int> trapdoor_coordinates_x = {trapdoor_x};
-    vector<int> trapdoor_coordinates_y = {trapdoor_y};
+	// In these vectors we store all X and Y treasure coordinates
+	vector<int> treasure_coordinates_x = { treasure_x };
+	vector<int> treasure_coordinates_y = { treasure_y };
 
-    // Specify secret password
-    char secret_password = 123;
+	// In these vectors we store all X and Y trapdoor coordinates
+	vector<int> trapdoor_coordinates_x = { trapdoor_x };
+	vector<int> trapdoor_coordinates_y = { trapdoor_y };
 
-    while (true)
-    {
-        string command = "";
-        cin >> command;
+	// In this vector we are going to store indexes of players that lost
+	vector<int> lost_players_indexes;
 
-        // Password checker
-        if (command == "PSS")
-        {
-            check_password(players[active_player_number], secret_password);
-        }
+	// Specify secret password
+	char secret_password = 123;
 
-        // Adding wall
-        else if (command == "WLL")
-        {
-            add_object_to_game(walls_coordinates_x, walls_coordinates_y, wall_object_name);
-            continue;
-        }
-        // Adding treasure
-        else if (command == "TRS")
-        {
-            add_object_to_game(treasure_coordinates_x, treasure_coordinates_y, treasure_object_name);
-            continue;
-        }
-        // Adding trapdoor
-        else if (command == "TRD")
-        {
-            add_object_to_game(trapdoor_coordinates_x, trapdoor_coordinates_y, trapdoor_object_name);
-            continue;
-        }
+	while (true)
+	{
+		// Check if player is allowed to move (if didn't lose)
+		for (size_t i = 0; i < lost_players_indexes.size(); ++i)
+		{
+			if (lost_players_indexes[i] == active_player_number)
+			{
+				increment_player_counter(active_player_number, players);
+				continue;
+			}
+		}
 
-        // Move
-        else if (command == "MOV")
-        {
-            move_player(players, active_player_number,
-                        trapdoor_coordinates_x, trapdoor_coordinates_y,
-                        treasure_coordinates_x, treasure_coordinates_y,
-                        walls_coordinates_x, walls_coordinates_y);
-        }
+		string command;
+		cin >> command;
 
-        // Pick a treaure
-        else if (command == "PCK")
-        {
-            PCK_command(players, active_player_number);
-        }
+		// Password checker
+		if (command == "PSS")
+		{
+			check_password(players[active_player_number], secret_password);
+		}
 
-        // PRT option
-        else if (command == "PRT")
-        {
-            PRT_command(players, active_player_number,
-                        trapdoor_coordinates_x, trapdoor_coordinates_y,
-                        treasure_coordinates_x, treasure_coordinates_y,
-                        walls_coordinates_x, walls_coordinates_y);
-            // We don't want to switch players
-            continue;
-        }
+		// Adding wall
+		else if (command == "WLL")
+		{
+			add_object_to_game(walls_coordinates_x, walls_coordinates_y, wall_object_name);
+			continue;
+		}
+		// Adding treasure
+		else if (command == "TRS")
+		{
+			add_object_to_game(treasure_coordinates_x, treasure_coordinates_y, treasure_object_name);
+			continue;
+		}
+		// Adding trapdoor
+		else if (command == "TRD")
+		{
+			add_object_to_game(trapdoor_coordinates_x, trapdoor_coordinates_y, trapdoor_object_name);
+			continue;
+		}
 
-        // Reset the game
-        else if (command == "NDS")
-        {
-            NDS_command(players,
-                        trapdoor_coordinates_x, trapdoor_coordinates_y,
-                        treasure_coordinates_x, treasure_coordinates_y,
-                        walls_coordinates_x, walls_coordinates_y);
-            continue;
-        }
+		// Move
+		else if (command == "MOV")
+		{
+			move_player(players, active_player_number,
+				trapdoor_coordinates_x, trapdoor_coordinates_y,
+				treasure_coordinates_x, treasure_coordinates_y,
+				walls_coordinates_x, walls_coordinates_y,
+				lost_players_indexes);
+		}
 
-        // Initialize players
-        else if (command == "NPS")
-        {
-            NPS_command(players);
-            // Reset the counter !!!! It took me so much time to fix that assertion error :)
-            active_player_number = 0;
-            continue;
-        }
+		// Pick a treaure
+		else if (command == "PCK")
+		{
+			PCK_command(players, active_player_number, treasure_coordinates_x, treasure_coordinates_y);
+		}
 
-        // Skip option
-        else if (command == "SKP")
-        {
-            // Just do nothing
-        }
+		// PRT option
+		else if (command == "PRT")
+		{
+			PRT_command(players, active_player_number,
+						trapdoor_coordinates_x, trapdoor_coordinates_y,
+						treasure_coordinates_x, treasure_coordinates_y,
+						walls_coordinates_x, walls_coordinates_y);
+			// We don't want to switch players
+			continue;
+		}
 
-        // End of the game command
-        else if (command == "END")
-        {
-            if (player1->has_treasure == 'T')
-                cout << "Player 1 won" << endl;
-            else if (player2->has_treasure == 'T')
-                cout << "Player 2 won" << endl;
-            break;
-        }
+		// Reset the game
+		else if (command == "NDS")
+		{
+			NDS_command(players,
+						trapdoor_coordinates_x, trapdoor_coordinates_y,
+						treasure_coordinates_x, treasure_coordinates_y,
+						walls_coordinates_x, walls_coordinates_y);
+			continue;
+		}
 
-        // Display all available commands
-        else if (command == "HLP")
-        {
-            print_available_commands();
-            continue;
-        }
+		// Initialize players
+		else if (command == "NPS")
+		{
+			NPS_command(players);
+			// Reset the counter !!!! It took me so much time to fix that assertion error :)
+			active_player_number = 0;
+			continue;
+		}
 
-        // User enter some unknown command
-        else
-        {
-            print_available_commands();
-            cout << "You entered unknown command, quitting the game." << endl;
-            break;
-        }
+		// Skip option
+		else if (command == "SKP")
+		{
+			// Just do nothing
+		}
 
-        // Update which player should now move
-        active_player_number++;
-        // Beacuse we index from 0 I have to subtract one from the size of players vector
-        if (active_player_number > players.size() - 1)
-        {
-            // We want to make a "circle"
-            active_player_number = 0;
-        }
-    }
+		// End of the game command
+		else if (command == "END")
+		{
+			break;
+		}
 
-    // After the end of the game we can delete all players
-    for (size_t i = 0; i < players.size(); ++i)
-    {
-        delete players[i];
-    }
+		// Display all available commands
+		else if (command == "HLP")
+		{
+			print_available_commands();
+			continue;
+		}
+
+		// User enter some unknown command
+		else {
+			cout << "COMMAND : " << command << endl;
+			cout << "You entered unknown command, quitting the game." << endl;
+			print_available_commands();
+			break;
+		}
+
+		increment_player_counter(active_player_number, players);
+	}
+
+	// After the end of the game we can delete all players
+	for (size_t i = 0; i < players.size(); ++i)
+	{
+		delete players[i];
+	}
 }
