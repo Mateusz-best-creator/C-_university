@@ -1,0 +1,39 @@
+Markdown:
+
+Jest to prosty język znaczników używany do formatowania tekstu.
+Skupia się głównie na prostocie i czytelności składni.
+Oferuje podstawowe funkcje formatowania, takie jak pogrubienie, kursywa, listy, nagłówki itp.
+Jest szeroko stosowany w różnych miejscach, takich jak README w repozytoriach GitHub, fora internetowe, blogi itp.
+Nie oferuje zaawansowanych funkcji, takich jak tworzenie tabel czy załączanie interaktywnych elementów.
+
+Quarto:
+
+Jest to bardziej zaawansowany język do tworzenia dokumentacji i notatek, 
+który integruje Markdown z funkcjami programowania i analizy danych.
+
+Oprócz podstawowych funkcji formatowania oferuje również obsługę matematyki, 
+diagramów, wykresów, interaktywnych komponentów i wiele innych.
+
+Posiada wbudowane narzędzia do zarządzania projektem, kontroli wersji, 
+kompilacji do różnych formatów (np. HTML, PDF, EPUB) oraz automatyzacji zadań.
+
+Jest często wykorzystywany w dziedzinach naukowych, edukacyjnych i technicznych, 
+gdzie wymagane są zaawansowane funkcje formatowania i analizy danych.
+
+Podsumowując, choć oba języki są używane do tworzenia dokumentacji i notatek, 
+Markdown jest prostszy i ma bardziej ograniczone możliwości, podczas gdy Quarto oferuje 
+zaawansowane funkcje formatowania i analizy danych.
+
+
+
+
+
+Markdown is a lightweight markup language primarily used for formatting plain text documents. 
+It's simple to learn and widely supported, making it popular for writing documentation, README files, 
+and simple web pages. Markdown uses a straightforward syntax to indicate formatting elements like headers, lists, links, and emphasis.
+
+
+Quarto, on the other hand, is a more advanced document format that extends Markdown with additional features for scholarly 
+and technical writing. It offers enhanced capabilities such as built-in support for citations, cross-references, 
+mathematical typesetting, and document metadata management. Quarto aims to provide a more comprehensive solution 
+for creating complex documents while still maintaining the simplicity and readability of Markdown syntax.
